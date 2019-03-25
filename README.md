@@ -14,4 +14,6 @@ vue 企业级前端开发脚手架
 - editorconfig 统一编辑器配置
 - 路由按需加载
 - axios 简单封装支持多浏览器
--
+- 自定义vue全局filter
+- lodash-es 自动tree-shaking
+- 开关控制访问mock数据或者是线上接口和测试环境

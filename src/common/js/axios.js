@@ -18,7 +18,7 @@ axios.get = function (url, getParams) {
     }
 };
 
-// axios post提交数据的方的polyfill写法 以及添加时间戳
+// axios post提交数据的方的polyfill写法 以及添加时间戳 支付宝的webview post请求也会缓存
 axios.post = function (url, postParams) {
     if (postParams) {
         for (let item in postParams) {
