@@ -2,12 +2,12 @@ module.exports = {
     plugins: [
         require('autoprefixer')({
             'browsers': [
-                'defaults',
-                'not ie < 11',
                 'last 2 versions',
                 '> 1%',
-                'iOS 7',
-                'last 3 iOS versions'
+                'iOS >= 7',
+                'not ie > 0',
+                'not ie_mob  > 0',
+                'not dead'
             ]
         })
     ]

@@ -44,10 +44,14 @@ input,
 select,
 textarea {
   margin: 0;
+  border-width 0
+  outline:none
 }
 
-html {
+html,body {
   box-sizing: border-box;
+  height 100%;
+  width: 100%;
 }
 
 *, *:before, *:after {
@@ -84,4 +88,12 @@ th {
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+}
+
+
+
+::-webkit-input-placeholder {
+    color:#999
+    font-size 30px
+    font-weight: 300
 }
