@@ -1,6 +1,6 @@
 function parse(url = location.search) {
     const obj = {};
-    const arr = url.match(new RegExp('[?&][^?&]+=[^?&]+', 'g'));
+    const arr = url.match(new RegExp('[?&][^?&]+=[^?&]+', 'g')) || [];
 
     if (arr.length) {
         arr.forEach(item => {

@@ -14,28 +14,34 @@
         <h2>多语言支持默认加载en-US</h2>
         <div> 多语言支持 {{$t("la")}}</div>
         <div>多语言支持 {{$t("testLang")}}</div>
+        <div class="test-bridge1" @click="testBridge"></div>
+        <div class="test-bridge2" @click="closePage"></div>
 </div>
 
 </template>
 
 <script>
-import * as localApi from '../../api/index.js';
+import _get from '../../lib/lodash-es/get.js';
+
 export default {
     data() {
         return {};
     },
     created() {
-        console.log('created');
-
 
     },
     mounted() {
-        // localApi.chargeMoney({}).then(resp => {
-        //     console.log('*************test api data****************');
-        //     console.log(resp);
-        //     console.log('*******************************');
-        // });
 
+
+    },
+    methods: {
+        testBridge: function () {
+            console.log('ONEOpenPaymentVC');
+            _get(Fusion, 'walletModule.gotoWallet', '') && Fusion.walletModule.gotoWallet({}, function (response) {});
+        },
+        closePage: function () {
+            _get(Fusion, 'closePage', '') && Fusion.closePage({}, function (response) {});
+        }
     }
 };
 </script>
@@ -56,4 +62,10 @@ h2
     real1px(#fd0101)
 .others
     color: yellow
+.test-bridge1, .test-bridge2
+    width 100px
+    height 100px
+    background-color red
+.test-bridge2
+    background-color yellow
 </style>

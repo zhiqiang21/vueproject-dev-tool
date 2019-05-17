@@ -11,28 +11,22 @@ const path = require('path');
 const projectRootDir = path.resolve(__dirname, '../');
 const localDevPort = 8081;
 
-// 获取src目录下的index.html 模板文件
-const indexTemplateList = glob.sync(`${projectRootDir}/src/routes/**/*.html`);
+// 获取src/routes 目录下页面目录
+const indexTemplateList = glob.sync(`${projectRootDir}/src/routes/!(index.html)`);
+
 const htmlWebpackPluginList = [];
 
-// 配置页面的title
-// const fileNameToTitle = {
-//     'home': '首页',
-//     'others': '其它'
-// };
 
 console.log('************* start 本地调试页面访问的url ****************');
 indexTemplateList.forEach(item => {
     const filename = item.substring(item.lastIndexOf('/') + 1);
-    const fileTag = filename.substring(0, filename.lastIndexOf('.'));
 
-    console.log(`http://127.0.0.1:${localDevPort}/${fileTag}/${filename}`);
+    console.log(`http://127.0.0.1:${localDevPort}/${filename}/${filename}.html`);
 
     htmlWebpackPluginList.push(new htmlWebpackPlugin({
-        // title: fileNameToTitle[fileTag],
-        chunks: [fileTag],
-        template: path.resolve(projectRootDir, item),
-        filename: `${fileTag}/${filename}`,
+        chunks: [filename],
+        template: path.resolve(projectRootDir, 'src/routes/index.html'),
+        filename: `${filename}/${filename}.html`,
         inject: 'body'
     }));
 });
@@ -88,7 +82,7 @@ const webpackDevPlugins = webpackBaseConfig.plugins.concat([
 
 Object.assign(webpackDevConfig, webpackBaseConfig, {
     module: {rules: webpackDevRule},
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
     devServer: {
         port: localDevPort,
         // 开启模块热重载

@@ -34,6 +34,21 @@ entryList.forEach(item => {
 });
 
 
+// 配置线上环境打包成一个包的 第三方依赖
+// entryListMap['vendor'] = [
+//     'vue',
+//     'vue-router',
+//     'axios',
+//     'i18next',
+//     'fastclick',
+//     '@panter/vue-i18next'
+// ];
+
+
+// entryListMap['libjs'] = commonJsList.concat(libJsList);
+// entryListMap['libjs'] = [];
+
+
 module.exports = {
     context: projectRootDir,
     entry: entryListMap,

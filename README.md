@@ -17,4 +17,4 @@ vue 企业级多入口前端开发脚手架
 - lodash-es 自动tree-shaking
 - 开关控制访问mock数据或者是线上接口和测试环境
 - editorconfig 统一编辑器配置
-- - eslint代码检查，自动修复提交代码时进行代码检查
+- eslint代码检查，自动修复提交代码时进行代码检查
