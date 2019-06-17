@@ -10,7 +10,7 @@ vue 企业级多入口前端开发脚手架
 - Vue + Vue-router + vuex
 - build 后支持gzip
 - 配置化 polyfill
-- vue组件库cube-ui支持，后编译组件按需编译加载
+- vue组件库cube-ui支持，后编译组件按需编译加载，对于cube-ui中文件体积比较大的组件`datepicker`或者`scroll`等在页面中单次引入单独打包进页面的js代码中，当minChunk >= 2时，将这些组件打包进`common.js`中
 - 路由按需加载
 - axios 简单封装支持多浏览器，针对一些webview缓存post 或者是get请求添加时间戳，拦截器使用
 - 自定义vue全局filter

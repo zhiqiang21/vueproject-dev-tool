@@ -155,12 +155,20 @@ Object.assign(webpackProducConfig, webpackBaseConfig, {
             chunks: 'all',
             automaticNameDelimiter: '.',
             name: undefined,
-            // minChunks: 1,
             cacheGroups: {
                 default: false,
                 vendors: false,
                 common: {
                     test: function (module, chunks) {
+
+                        // if (/scroll/.test(module.context)) {
+                        //     let chunkName = '';
+                        //     chunks.forEach(item => {
+                        //         chunkName += item.name + ',';
+                        //     });
+                        //     console.log(`module-scroll`, module.context, chunkName, chunks.length);
+                        // }
+
                         if (/src\/common\//.test(module.context) ||
                             /src\/lib/.test(module.context) ||
                             /cube-ui/.test(module.context) ||
@@ -183,6 +191,7 @@ Object.assign(webpackProducConfig, webpackBaseConfig, {
                         }
                     },
                     name: 'vendor',
+                    minChunks: 2,
                     priority: 10,
                     enforce: true
                 }
