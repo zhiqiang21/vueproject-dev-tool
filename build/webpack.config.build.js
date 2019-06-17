@@ -44,10 +44,9 @@ indexTemplateList.forEach(item => {
         // 不加 .. 会输出到static目录下
         filename: `../${filename}/${filename}.html`,
         inject: 'body',
-        // 配置网站的 facicon
-        // favicon: path.resolve(projectRootDir, 'src/common/img/favicon.ico'),
+        favicon: path.resolve(projectRootDir, 'src/common/img/favicon.ico'),
         // 配置注入页面的chunk 多入口是根据entry配置的多入口来命名的
-        chunks: ['runtime', 'vendor', filename],
+        chunks: ['runtime', 'vendor', 'common', filename],
         minify: {
             // 对大小写是否敏感
             caseSensitive: true,
@@ -63,65 +62,10 @@ const webpackProducConfig = {};
 const webpackProductPlugin = webpackBaseConfig.plugins.concat(htmlWebpackPluginList);
 
 // 开启 bundle analyzer
-// webpackProductPlugin.push(new bundleAnalyse());
+webpackProductPlugin.push(new bundleAnalyse());
 
 webpackProductPlugin.push(new InlineManifestWebpackPlugin());
 
-// webpackProductPlugin.push(new PrerenderSPAPlugin({
-//     staticDir: path.join(__dirname, '../output'),
-
-//     // Optional - The path your rendered app should be output to.
-//     // (Defaults to staticDir.)
-//     outputDir: path.join(__dirname, 'prerendered'),
-
-//     // Optional - The location of index.html
-//     indexPath: path.resolve(projectRootDir, 'output/balance_qa/balance_qa.html'),
-
-//     // Required - Routes to render.
-//     routes: ['/balance_qa/balance_qa.html'],
-//     renderer: new Renderer({
-//         // Optional - The name of the property to add to the window object with the contents of `inject`.
-//         // injectProperty: '__PRERENDER_INJECTED',
-//         // Optional - Any values you'd like your app to have access to via `window.injectProperty`.
-//         // inject: {foo: 'bar'},
-
-//         // Optional - defaults to 0, no limit.
-//         // Routes are rendered asynchronously.
-//         // Use this to limit the number of routes rendered in parallel.
-//         // maxConcurrentRoutes: 4,
-//         postProcess(renderedRoute) {
-//         // add CDN
-
-//             // console.log('**************renderedRoute***************');
-//             // console.log(renderedRoute.html);
-//             // console.log('*******************************');
-//             // renderedRoute.html = renderedRoute.html.replace(
-//             //     /(<script[^<>]*src=\")((?!http|https)[^<>\"]*)(\"[^<>]*>[^<>]*<\/script>)/ig,
-//             //     `$1${cdnPath}$2$3`
-//             // ).replace(
-//             //     /(<link[^<>]*href=\")((?!http|https)[^<>\"]*)(\"[^<>]*>)/ig,
-//             //     `$1${cdnPath}$2$3`
-//             // );
-
-//             return renderedRoute;
-//         },
-
-//         // Optional - Wait to render until the specified event is dispatched on the document.
-//         // eg, with `document.dispatchEvent(new Event('custom-render-trigger'))`
-//         renderAfterDocumentEvent: 'page-dom-mounted',
-
-//         // Optional - Wait to render until the specified element is detected using `document.querySelector`
-//         // renderAfterElementExists: 'my-app-element',
-
-//         // Optional - Wait to render until a certain amount of time has passed.
-//         // NOT RECOMMENDED
-//         // renderAfterTime: 5000, // Wait 5 seconds.
-
-//         // Other puppeteer options.
-//         // (See here: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions)
-//         headless: false // Display the browser window when rendering. Useful for debugging.
-//     })
-// }));
 
 // 拆分css进入单独的文件
 webpackProductPlugin.push(new MiniCssExtractPlugin({
@@ -188,7 +132,7 @@ const outputConf = {
     path: path.resolve(projectRootDir, 'output/static'),
     filename: 'js/[name]_[chunkhash:7].js',
     chunkFilename: 'js/[name]_[chunkhash:7].js',
-    // publicPath: cdnPath,
+    publicPath: cdnPath,
     crossOriginLoading: 'anonymous'
 };
 
@@ -211,21 +155,35 @@ Object.assign(webpackProducConfig, webpackBaseConfig, {
             chunks: 'all',
             automaticNameDelimiter: '.',
             name: undefined,
+            // minChunks: 1,
             cacheGroups: {
                 default: false,
                 vendors: false,
-                // libs: {
-                // css 文件不拆分
-                //  test: /\.m?js$/,
-                //     name: 'libs',
-                //     minChunks: 2,
-                //     priority: -20,
-                //     reuseExistingChunk: true
-                // },
+                common: {
+                    test: function (module, chunks) {
+                        if (/src\/common\//.test(module.context) ||
+                            /src\/lib/.test(module.context) ||
+                            /cube-ui/.test(module.context) ||
+                            /better-scroll/.test(module.context)) {
+                            return true;
+                        }
+                    },
+                    chunks: 'all',
+                    name: 'common',
+                    minChunks: 2,
+                    priority: 20
+                },
                 vendor: {
-                    chunks: 'initial',
-                    test: path.resolve(__dirname, '../node_modules'),
-                    name: 'vendor', // 使用 vendor 入口作为公共部分
+                    chunks: 'all',
+                    test: (module, chunks) => {
+                        // module.context 当前文件模块所属的目录 该目录下包含多个文件
+                        // module.resource 当前模块文件的绝对路径
+                        if (/node_modules/.test(module.context)) {
+                            return true;
+                        }
+                    },
+                    name: 'vendor',
+                    priority: 10,
                     enforce: true
                 }
             }
