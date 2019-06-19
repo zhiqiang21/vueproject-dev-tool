@@ -44,7 +44,8 @@ indexTemplateList.forEach(item => {
         // 不加 .. 会输出到static目录下
         filename: `../${filename}/${filename}.html`,
         inject: 'body',
-        favicon: path.resolve(projectRootDir, 'src/common/img/favicon.ico'),
+        // 配置网站的favicon，如果需要配置打开该注释并且填写正确的路径
+        // favicon: path.resolve(projectRootDir, 'src/common/img/favicon.ico'),
         // 配置注入页面的chunk 多入口是根据entry配置的多入口来命名的
         chunks: ['runtime', 'vendor', 'common', filename],
         minify: {
